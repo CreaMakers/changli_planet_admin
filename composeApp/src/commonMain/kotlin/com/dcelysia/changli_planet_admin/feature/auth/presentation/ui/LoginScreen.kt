@@ -1,6 +1,5 @@
-package com.dcelysia.changli_planet_admin.auth
+package com.dcelysia.changli_planet_admin.feature.auth.presentation.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -27,15 +25,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dcelysia.changli_planet_admin.feature.auth.presentation.mvi.LoginIntent
+import com.dcelysia.changli_planet_admin.feature.auth.presentation.mvi.LoginEffect
+import com.dcelysia.changli_planet_admin.feature.auth.presentation.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun LoginScreen() {
-    var account by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(
+    onLoginSuccess: () -> Unit = {},
+    viewModel: LoginViewModel? = null
+) {
+    val loginViewModel = viewModel ?: remember { LoginViewModel() }
     var passwordVisible by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
+    val uiState = loginViewModel.uiState
+    
+    // Handle effects
+    LaunchedEffect(loginViewModel) {
+        loginViewModel.effects.collect { effect ->
+            when (effect) {
+                is LoginEffect.NavigateToHome -> {
+                    onLoginSuccess()
+                }
+                is LoginEffect.ShowError -> {
+                    // Error is already shown in UI state
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -57,6 +74,26 @@ fun LoginScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            // Logo 和标题区域
+            Card(
+                modifier = Modifier
+                    .size(80.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White.copy(alpha = 0.9f)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "🌍",
+                        fontSize = 32.sp
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -95,8 +132,8 @@ fun LoginScreen() {
                 ) {
                     // 账号输入框
                     OutlinedTextField(
-                        value = account,
-                        onValueChange = { account = it },
+                        value = uiState.username,
+                        onValueChange = { loginViewModel.handleIntent(LoginIntent.UpdateUsername(it)) },
                         label = { Text("账号") },
                         placeholder = { Text("请输入您的账号") },
                         leadingIcon = {
@@ -120,8 +157,8 @@ fun LoginScreen() {
 
                     // 密码输入框
                     OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value = uiState.password,
+                        onValueChange = { loginViewModel.handleIntent(LoginIntent.UpdatePassword(it)) },
                         label = { Text("密码") },
                         placeholder = { Text("请输入您的密码") },
                         leadingIcon = {
@@ -155,12 +192,28 @@ fun LoginScreen() {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
+                    // 错误信息显示
+                    uiState.errorMessage?.let { error ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = error,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                modifier = Modifier.padding(12.dp),
+                                fontSize = 14.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
                     // 登录按钮
                     Button(
-                        onClick = {
-                            isLoading = true
-                            // TODO: 实现登录逻辑
-                        },
+                        onClick = { loginViewModel.handleIntent(LoginIntent.Login) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
@@ -168,9 +221,9 @@ fun LoginScreen() {
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
-                        enabled = account.isNotBlank() && password.isNotBlank() && !isLoading
+                        enabled = uiState.username.isNotBlank() && uiState.password.isNotBlank() && !uiState.isLoading
                     ) {
-                        if (isLoading) {
+                        if (uiState.isLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
                                 color = Color.White,

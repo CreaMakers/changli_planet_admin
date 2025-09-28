@@ -3,6 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
+    <key>NSAllowsArbitraryLoads</key>
 	<true/>
 </dict>
 </plist>
