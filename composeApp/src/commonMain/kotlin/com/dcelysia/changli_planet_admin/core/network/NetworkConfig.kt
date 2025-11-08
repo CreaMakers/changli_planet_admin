@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 expect fun createHttpClient(): HttpClient
 
 object NetworkConfig {
-    const val BASE_URL = "http://113.44.47.220:8082"
+    const val BASE_URL = "https://web.csust.creamaker.cn"
     
     val httpClient by lazy {
         createHttpClient()
