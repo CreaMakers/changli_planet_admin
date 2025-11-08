@@ -9,13 +9,6 @@ data class LoginRequest(
 )
 
 @Serializable
-data class LoginResponse(
-    val code: String,
-    val msg: String,
-    val data: LoginData
-)
-
-@Serializable
 data class LoginData(
     val access_token: String,
     val expires_in: String
