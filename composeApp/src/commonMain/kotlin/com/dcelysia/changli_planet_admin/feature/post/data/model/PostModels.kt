@@ -2,37 +2,65 @@ package com.dcelysia.changli_planet_admin.feature.post.data.model
 
 import kotlinx.serialization.Serializable
 
+/**
+ * 新鲜事数据模型
+ */
 @Serializable
-data class PostItem(
-    val id: Int,
+data class FreshNews(
+    val freshNewsCheckId: Int,
+    val freshNewsId: Int,
     val title: String,
     val content: String,
-    val author: String,
+    val imageUrl: String,  // 多个图片用逗号分隔
+    val checkStatus: Int,  // 0：待审核，1：通过，2：拒绝
     val createTime: String,
-    val status: String,
-    val likeCount: Int,
-    val commentCount: Int,
-    val userId: Int
-)
-
-enum class PostStatus {
-    PUBLISHED, PENDING, REJECTED;
+    val updateTime: String,
+    val isDeleted: Int,
+    val checkTime: String?
+) {
+    /**
+     * 获取图片URL列表
+     */
+    fun getImageUrls(): List<String> {
+        return imageUrl.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    }
     
-    companion object {
-        fun fromString(status: String): PostStatus {
-            return when (status.lowercase()) {
-                "published" -> PUBLISHED
-                "pending" -> PENDING  
-                "rejected" -> REJECTED
-                else -> PENDING
-            }
+    /**
+     * 获取审核状态文本
+     */
+    fun getCheckStatusText(): String {
+        return when (checkStatus) {
+            0 -> "待审核"
+            1 -> "已通过"
+            2 -> "已拒绝"
+            else -> "未知"
         }
     }
 }
 
+/**
+ * 新鲜事响应模型
+ */
 @Serializable
-data class PostsResponse(
+data class FreshNewsResponse(
     val code: String,
     val msg: String,
-    val data: List<PostItem>
+    val data: List<FreshNews>
+)
+
+/**
+ * 审核请求参数
+ */
+data class ReviewParams(
+    val freshNewsCheckId: Int,
+    val checkStatus: Int  // 1：通过，2：拒绝
+)
+
+/**
+ * 分页查询参数
+ */
+data class PostQueryParams(
+    val page: Int = 1,
+    val pageSize: Int = 10,
+    val checkStatus: Int? = 0  // 默认只显示待审核的
 )
