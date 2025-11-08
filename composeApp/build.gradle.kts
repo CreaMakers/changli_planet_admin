@@ -67,6 +67,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.coil)
             implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
 //            implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.multiplatform.settings.serialization)

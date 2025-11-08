@@ -47,7 +47,7 @@ fun PostManagementScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+            .padding(16.dp)
     ) {
         // 页面标题
         Row(

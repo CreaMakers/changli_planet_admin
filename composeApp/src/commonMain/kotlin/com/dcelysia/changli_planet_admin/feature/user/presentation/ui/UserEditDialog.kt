@@ -175,7 +175,7 @@ fun UserEditDialog(
                     )
                     
                     OutlinedTextField(
-                        value = editedUser.userProfileResp.grade,
+                        value = editedUser.userProfileResp.grade ?: "未设置",
                         onValueChange = { 
                             editedUser = editedUser.copy(
                                 userProfileResp = editedUser.userProfileResp.copy(grade = it)
@@ -256,7 +256,7 @@ fun UserEditDialog(
                     )
                     
                     OutlinedTextField(
-                        value = editedUser.userStatsResp.studentNumber,
+                        value = editedUser.userStatsResp.studentNumber ?: "无绑定学号",
                         onValueChange = { 
                             editedUser = editedUser.copy(
                                 userStatsResp = editedUser.userStatsResp.copy(studentNumber = it)

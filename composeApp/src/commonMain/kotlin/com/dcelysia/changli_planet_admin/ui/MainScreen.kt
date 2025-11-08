@@ -7,10 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dcelysia.changli_planet_admin.core.storage.TokenManager
+import com.dcelysia.changli_planet_admin.feature.user.presentation.ui.UserManagementScreen
 import com.dcelysia.changli_planet_admin.navigation.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -103,6 +103,7 @@ fun MobileLayout(
         }
     }
 }
+
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -208,7 +209,7 @@ fun DesktopLayout(
 fun ScreenContent(screen: Screen) {
     when (screen) {
         Screen.Dashboard -> DashboardScreen()
-        Screen.UserManagement -> com.dcelysia.changli_planet_admin.feature.user.presentation.ui.UserManagementScreen()
+        Screen.UserManagement -> UserManagementScreen()
         Screen.PostManagement -> PostManagementScreen()
         Screen.Settings -> SettingsScreen()
         Screen.Profile -> ProfileScreen()

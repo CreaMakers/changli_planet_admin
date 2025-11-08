@@ -81,7 +81,7 @@ class UserManagementViewModel(
             val params = UserQueryParams(
                 page = uiState.currentPage,
                 limit = uiState.pageSize,
-                userName = if (uiState.searchQuery.isNotBlank()) uiState.searchQuery else null,
+                userName = uiState.searchQuery.ifBlank { null },
                 isAdmin = uiState.filterAdmin,
                 isDeleted = uiState.filterDeleted,
                 isBanned = uiState.filterBanned
@@ -131,7 +131,7 @@ class UserManagementViewModel(
             val params = UserQueryParams(
                 page = 1,
                 limit = uiState.pageSize,
-                userName = if (uiState.searchQuery.isNotBlank()) uiState.searchQuery else null,
+                userName = uiState.searchQuery.ifBlank { null },
                 isAdmin = uiState.filterAdmin,
                 isDeleted = uiState.filterDeleted,
                 isBanned = uiState.filterBanned

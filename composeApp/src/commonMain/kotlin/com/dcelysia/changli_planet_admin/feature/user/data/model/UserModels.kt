@@ -22,8 +22,8 @@ data class UserProfileResp(
     val bio: String?,
     val userLevel: Int,
     val gender: Int,
-    val grade: String,
-    val birthDate: String,
+    val grade: String?,
+    val birthDate: String?,
     val location: String?,
     val website: String?,
     val createTime: String,
@@ -35,7 +35,7 @@ data class UserProfileResp(
 @Serializable
 data class UserStatsResp(
     val userId: Int,
-    val studentNumber: String,
+    val studentNumber: String?,
     val articleCount: Int,
     val commentCount: Int,
     val statementCount: Int,
@@ -76,8 +76,8 @@ data class UserProfileReq(
     val bio: String?,
     val userLevel: Int,
     val gender: Int,
-    val grade: String,
-    val birthDate: String,
+    val grade: String?,
+    val birthDate: String?,
     val location: String?,
     val website: String?,
     val isDeleted: Int,
@@ -87,7 +87,7 @@ data class UserProfileReq(
 @Serializable
 data class UserStatsReq(
     val userId: Int,
-    val studentNumber: String,
+    val studentNumber: String?,
     val articleCount: Int,
     val commentCount: Int,
     val statementCount: Int,
@@ -107,12 +107,6 @@ data class UpdateUserRequest(
     val userStatsReq: UserStatsReq
 )
 
-@Serializable
-data class UpdateUserResponse(
-    val code: String,
-    val msg: String,
-    val data: UserFullInfo
-)
 
 // 分页查询参数
 data class UserQueryParams(
