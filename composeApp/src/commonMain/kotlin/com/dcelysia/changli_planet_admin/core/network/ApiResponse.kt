@@ -8,3 +8,10 @@ data class ApiResponse<T>(
     val msg: String,
     val data: T
 )
+
+
+@Serializable
+data class ApiNotDataResponse(
+    val code: String,
+    val msg: String,
+)

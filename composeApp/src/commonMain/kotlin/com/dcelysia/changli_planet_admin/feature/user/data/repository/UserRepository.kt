@@ -1,5 +1,6 @@
 package com.dcelysia.changli_planet_admin.feature.user.data.repository
 
+import com.dcelysia.changli_planet_admin.core.network.ApiNotDataResponse
 import com.dcelysia.changli_planet_admin.core.network.ApiResponse
 import com.dcelysia.changli_planet_admin.core.network.NetworkConfig
 import com.dcelysia.changli_planet_admin.core.storage.TokenManager
@@ -41,7 +42,7 @@ class UserRepository {
     /**
      * 更新用户信息（包括删除、封禁等操作）
      */
-    suspend fun updateUser(request: UpdateUserRequest): Result<UpdateUserResponse> {
+    suspend fun updateUser(request: UpdateUserRequest): Result<ApiNotDataResponse> {
         return try {
             val token = TokenManager.getToken() ?: throw Exception("未登录")
 
@@ -51,7 +52,7 @@ class UserRepository {
                 header("token", token)
                 contentType(ContentType.Application.Json)
                 setBody(request)
-            }.body<UpdateUserResponse>()
+            }.body<ApiNotDataResponse>()
 
             println("UserRepository - User updated successfully")
             Result.success(response)
@@ -64,7 +65,7 @@ class UserRepository {
     /**
      * 辅助方法：封禁用户
      */
-    suspend fun banUser(user: UserFullInfo): Result<UpdateUserResponse> {
+    suspend fun banUser(user: UserFullInfo): Result<ApiNotDataResponse> {
         val request = createUpdateRequest(user, isBanned = 1)
         return updateUser(request)
     }
@@ -72,7 +73,7 @@ class UserRepository {
     /**
      * 辅助方法：解封用户
      */
-    suspend fun unbanUser(user: UserFullInfo): Result<UpdateUserResponse> {
+    suspend fun unbanUser(user: UserFullInfo): Result<ApiNotDataResponse> {
         val request = createUpdateRequest(user, isBanned = 0)
         return updateUser(request)
     }
@@ -80,7 +81,7 @@ class UserRepository {
     /**
      * 辅助方法：删除用户（软删除）
      */
-    suspend fun deleteUser(user: UserFullInfo): Result<UpdateUserResponse> {
+    suspend fun deleteUser(user: UserFullInfo): Result<ApiNotDataResponse> {
         val request = createUpdateRequest(user, isDeleted = 1)
         return updateUser(request)
     }
@@ -88,7 +89,7 @@ class UserRepository {
     /**
      * 辅助方法：恢复已删除的用户
      */
-    suspend fun restoreUser(user: UserFullInfo): Result<UpdateUserResponse> {
+    suspend fun restoreUser(user: UserFullInfo): Result<ApiNotDataResponse> {
         val request = createUpdateRequest(user, isDeleted = 0)
         return updateUser(request)
     }
