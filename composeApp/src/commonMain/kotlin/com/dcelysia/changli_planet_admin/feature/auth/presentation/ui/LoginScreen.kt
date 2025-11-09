@@ -60,8 +60,8 @@ fun LoginScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF1976D2),  // 蓝色
-                        Color(0xFF0288D1)   // 浅蓝色
+                        Color(0xFF667eea),
+                        Color(0xFF764ba2)
                     )
                 )
             )
